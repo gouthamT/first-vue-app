@@ -1,28 +1,34 @@
 <template>
-  <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
-  </div>
+  <main class="container">
+    <template v-if="isLoading">
+      <Spinner />
+    </template>
+    <template v-else>
+      <ListView />
+    </template>
+  </main>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue';
+import { mapActions, mapGetters } from 'vuex';
+import Spinner from './components/Spinner.vue';
+import ListView from './components/ListView.vue';
 
 export default {
   name: 'app',
-  components: {
-    HelloWorld,
+  components: { ListView, Spinner },
+  created() {
+    this.getTasksAction();
+  },
+  methods: {
+    ...mapActions('userTasks', ['getTasksAction']),
+  },
+  computed: {
+    ...mapGetters('app', { isLoading: 'isLoading' }),
   },
 };
 </script>
 
-<style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style lang="scss">
+@import "bootstrap/scss/bootstrap.scss";
 </style>
